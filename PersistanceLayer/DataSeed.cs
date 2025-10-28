@@ -13,28 +13,27 @@ namespace PersistanceLayer
 {
     public class DataSeed(StoreDbContext _storeDbContext) : IDataSeeding
     {
-        void IDataSeeding.DataSeed()
+        async Task IDataSeeding.DataSeedAsync()
         {
 
-            try {
 
-                if (_storeDbContext.Database.GetPendingMigrations().Any())
+                if ((await _storeDbContext.Database.GetPendingMigrationsAsync()).Any())
                 {
 
-                    _storeDbContext.Database.Migrate();
+                   await _storeDbContext.Database.MigrateAsync();
                 }
 
                 if (_storeDbContext.ProductBrands.Any())
                 {
 
-                    var productsBrandsData = File.ReadAllText(@"..\PersistanceLayer\Data\SeedData\brands.json");
+                    var productsBrandsData = File.OpenRead(@"..\infrastructure\PersistanceLayer\Data\SeedData\brands.json");
 
-                    var brands = JsonSerializer.Deserialize<List<ProductBrand>>(productsBrandsData);
+                    var brands = await JsonSerializer.DeserializeAsync<List<ProductBrand>>(productsBrandsData);
 
                     if (brands is not null && brands.Any())
                     {
 
-                        _storeDbContext.ProductBrands.AddRange(brands);
+                       await _storeDbContext.ProductBrands.AddRangeAsync(brands);
                     }
 
                 }
@@ -42,14 +41,14 @@ namespace PersistanceLayer
                 if (_storeDbContext.ProductTypes.Any())
                 {
 
-                    var productsTypesData = File.ReadAllText(@"..\PersistanceLayer\Data\SeedData\types.json");
+                    var productsTypesData = File.OpenRead(@"..\infrastructure\PersistanceLayer\Data\SeedData\types.json");
 
-                    var types = JsonSerializer.Deserialize<List<ProductType>>(productsTypesData);
+                    var types =await JsonSerializer.DeserializeAsync<List<ProductType>>(productsTypesData);
 
                     if (types is not null && types.Any())
                     {
 
-                        _storeDbContext.ProductTypes.AddRange(types);
+                        await _storeDbContext.ProductTypes.AddRangeAsync(types);
                     }
 
                 }
@@ -57,24 +56,19 @@ namespace PersistanceLayer
                 if (_storeDbContext.Products.Any())
                 {
 
-                    var productsData = File.ReadAllText(@"..\PersistanceLayer\Data\SeedData\products.json");
+                    var productsData = File.OpenRead(@"..\infrastructure\PersistanceLayer\Data\SeedData\products.json");
 
-                    var products = JsonSerializer.Deserialize<List<Product>>(productsData);
+                    var products = await JsonSerializer.DeserializeAsync<List<Product>>(productsData);
 
                     if (products is not null && products.Any())
                     {
 
-                        _storeDbContext.Products.AddRange(products);
+                        await _storeDbContext.Products.AddRangeAsync(products);
                     }
 
                 }
 
-            }
-            catch (Exception ex) {
-            
-            
-            }
-
+               await _storeDbContext.SaveChangesAsync();
 
 
         }
