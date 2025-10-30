@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PersistanceLayer;
 using PersistanceLayer.Data;
 using PersistanceLayer.Repositories;
+using ServiceAbstractionLayer;
 using ServiceLayer;
 
 namespace TalabatDemo
@@ -29,6 +30,7 @@ namespace TalabatDemo
             builder.Services.AddScoped<IDataSeeding,DataSeed>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddAutoMapper((x) => { } , typeof(ServiceLayerAssemblyReference).Assembly);
+            builder.Services.AddScoped<IServiceManager , ServiceManager>();
 
             var app = builder.Build();
 
@@ -47,7 +49,7 @@ namespace TalabatDemo
 
             app.UseAuthorization();
 
-
+            app.UseStaticFiles();
             app.MapControllers();
 
             app.Run();
