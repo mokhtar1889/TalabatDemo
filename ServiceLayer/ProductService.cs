@@ -2,6 +2,7 @@
 using DomainLayer.Contracts;
 using DomainLayer.Models;
 using ServiceAbstractionLayer;
+using ServiceLayer.specifications;
 using Shared.DTOs;
 
 
@@ -11,8 +12,9 @@ namespace ServiceLayer
     {
         public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
         {
+            var specs = new ProductWithBrandAndTypeSpecifications();
             var repo = _unitOfWork.GetRepository<Product, int>();
-            var Product = await repo.GetAllAsync();
+            var Product = await repo.GetAllAsync(specs);
             var ProductDtos = _mapper.Map<IEnumerable<ProductDto>>(Product);
             return ProductDtos;
         }
