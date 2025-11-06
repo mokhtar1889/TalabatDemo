@@ -41,6 +41,10 @@ namespace PersistanceLayer.Repositories
             return await SpecifictionsEvaluator.CreateQuery(_storeDbContext.Set<TEntity>(), secifications).FirstOrDefaultAsync();
         }
 
-
+        public async Task<int> CountAsync(ISpecifications<TEntity, TKey> specifications)
+        {
+            return await SpecifictionsEvaluator.CreateQuery(_storeDbContext.Set<TEntity>(), specifications).CountAsync();
+        }
     }
-}
+    }
+

@@ -20,9 +20,35 @@ namespace ServiceLayer.specifications
 
         public List<Expression<Func<TEntity, object>>> IncludeExpressions { get; } = [];
 
+        public Expression<Func<TEntity, object>> OrderBy { get; private set; }
+
+        protected void AddOrderBy(Expression<Func<TEntity, object>> orderByExpression)
+        {
+
+            OrderBy = orderByExpression;
+        }
+
+        public Expression<Func<TEntity, object>> OrderByDescending { get; private set; }
+
+        protected void AddOrderByDescending(Expression<Func<TEntity, object>> orderByExpressionDescending)
+        {
+
+            OrderByDescending = orderByExpressionDescending;
+        }
+
         protected void AddInclude(Expression<Func<TEntity, object>> includeExpressions) {
 
             IncludeExpressions.Add(includeExpressions);
+        }
+
+        public int? Skip { get; private set; }
+        public int? Take { get; private set; }
+        public bool IsPaginated { get; set; }
+        protected void ApplyPagination(int pageSize, int pageIndex) {
+
+            IsPaginated = true;
+            Take = pageSize;
+            Skip = (pageIndex-1) * pageSize;
         }
     }
 }
