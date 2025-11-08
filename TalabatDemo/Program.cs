@@ -1,11 +1,17 @@
 
+using Azure;
 using DomainLayer.Contracts;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PersistanceLayer;
 using PersistanceLayer.Data;
 using PersistanceLayer.Repositories;
 using ServiceAbstractionLayer;
 using ServiceLayer;
+using Shared.ErrorModels;
+using TalabatDemo.CustomMiddelwares;
+using TalabatDemo.Extensions;
+using TalabatDemo.Factory;
 
 namespace TalabatDemo
 {
@@ -18,25 +24,22 @@ namespace TalabatDemo
             // Add services to the container.
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContext<StoreDbContext>(options =>
-            {
 
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            builder.Services.AddSwaggerService();
 
-            });
-            builder.Services.AddScoped<IDataSeeding,DataSeed>();
-            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            builder.Services.AddAutoMapper((x) => { } , typeof(ServiceLayerAssemblyReference).Assembly);
-            builder.Services.AddScoped<IServiceManager , ServiceManager>();
+            builder.Services.AddInfraStructureService(builder.Configuration);
+
+            builder.Services.AddApplicationServices();
+
+            builder.Services.AddWebApplicationServices();
 
             var app = builder.Build();
 
             using var scope = app.Services.CreateScope();
             var seedObj = scope.ServiceProvider.GetRequiredService<IDataSeeding>();
             await seedObj.DataSeedAsync();
+
+            app.UseMiddleware<CustomExceptionHandlerMiddelware>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

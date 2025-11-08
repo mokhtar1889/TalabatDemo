@@ -44,6 +44,7 @@ namespace ServiceLayer.specifications
         public int? Skip { get; private set; }
         public int? Take { get; private set; }
         public bool IsPaginated { get; set; }
+
         protected void ApplyPagination(int pageSize, int pageIndex) {
 
             IsPaginated = true;
