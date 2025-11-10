@@ -35,11 +35,9 @@ namespace TalabatDemo
 
             var app = builder.Build();
 
-            using var scope = app.Services.CreateScope();
-            var seedObj = scope.ServiceProvider.GetRequiredService<IDataSeeding>();
-            await seedObj.DataSeedAsync();
+            await app.SeedDataBaseAsync();
 
-            app.UseMiddleware<CustomExceptionHandlerMiddelware>();
+            app.UseCustomExceptionMiddleware();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

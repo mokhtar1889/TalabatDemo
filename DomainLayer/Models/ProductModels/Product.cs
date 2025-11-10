@@ -1,4 +1,4 @@
-﻿namespace DomainLayer.Models
+﻿namespace DomainLayer.Models.ProductModels
 {
     public class Product : BaseEntity<int>
     {

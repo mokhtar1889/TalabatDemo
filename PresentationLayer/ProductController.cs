@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ServiceAbstractionLayer;
 using Shared;
-using Shared.DTOs;
+using Shared.DTOs.ProductDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;

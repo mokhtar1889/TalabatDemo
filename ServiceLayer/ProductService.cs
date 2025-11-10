@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using DomainLayer.Contracts;
 using DomainLayer.Exceptions;
-using DomainLayer.Models;
+using DomainLayer.Models.ProductModels;
 using ServiceAbstractionLayer;
 using ServiceLayer.specifications;
 using Shared;
-using Shared.DTOs;
+using Shared.DTOs.ProductDtos;
 
 
 namespace ServiceLayer

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PersistanceLayer.Data;
 using PersistanceLayer.Repositories;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,13 @@ namespace PersistanceLayer
             });
             Services.AddScoped<IDataSeeding, DataSeed>();
             Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            Services.AddScoped<IBasketRepository, BasketRepository>();
+            Services.AddSingleton<IConnectionMultiplexer>( (_) => { 
+
+                return ConnectionMultiplexer.Connect(_configuration.GetConnectionString("ReddiseConnectionString"));
+            
+            
+            });
 
             return Services;
         }
